@@ -1,0 +1,3 @@
+src/components/CompendiumBrowser.tsx(22,6): error TS2554: Expected 0-1 arguments, but got 2.
+src/utils/sanitize.ts(1,27): error TS7016: Could not find a declaration file for module 'mongo-sanitize'. 'C:/Users/vitor/OneDrive/Documentos/Projetos/HyruleCompendium/hyrule-compendium/node_modules/mongo-sanitize/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/mongo-sanitize` if it exists or add a new declaration (.d.ts) file containing `declare module 'mongo-sanitize';`

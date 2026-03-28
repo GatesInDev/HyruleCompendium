@@ -1,0 +1,24 @@
+
+> hyrule-compendium@1.0.0 build
+> next build
+
+Ôû▓ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 2.1s
+  Running TypeScript ...
+  Finished TypeScript in 2.9s ...
+  Collecting page data using 10 workers ...
+  Generating static pages using 10 workers (0/9) ...
+  Generating static pages using 10 workers (2/9) 
+Error occurred prerendering page "/_not-found". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Event handlers cannot be passed to Client Component props.
+  {href: ..., style: ..., onMouseOver: function onMouseOver, onMouseOut: ..., children: ...}
+                                       ^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2451337651'
+}
+Export encountered an error on /_not-found/page: /_not-found, exiting the build.
+Ô¿» Next.js build worker exited with code: 1 and signal: null

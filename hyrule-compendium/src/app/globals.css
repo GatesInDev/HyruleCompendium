@@ -1,0 +1,573 @@
+:root {
+  /* Soft Light Mode (Flat Tears of the Kingdom Neutral) */
+  --background: #f5f3eb;
+  --foreground: #38342b;
+  --primary: #556c45;
+  --primary-foreground: #ffffff;
+  --muted: #e7e4d8;
+  --muted-foreground: #76705c;
+  --border: transparent;
+  --card: #ffffff;
+  --card-foreground: #38342b;
+  --radius-sm: 0.5rem;
+  --radius: 1rem;
+  --radius-full: 9999px;
+  
+  /* Extremely subtle shadow just for floating elements to give the "island" effect, everything else is flat */
+  --shadow-island: 0 8px 32px rgba(56, 52, 43, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Soft Dark Mode (Flat Deep Forest/Depths) */
+    --background: #1a1e16;
+    --foreground: #e4e6de;
+    --primary: #789961;
+    --primary-foreground: #1a1e16; 
+    --muted: #272c21;
+    --muted-foreground: #9ba193; 
+    --border: transparent;
+    --card: #20251b;
+    --card-foreground: #e4e6de;
+    
+    --shadow-island: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: inherit;
+  margin: 0;
+  padding: 0;
+  /* Prevent content from hiding behind floating island */
+  padding-bottom: 6rem;
+  min-height: 100vh;
+  
+  /* App-like properties */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+  /* Default cursor — slim elegant arrow, white fill with dark outline */
+  cursor: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M3 1 L3 17 L7 12 L11 18.5 L13.5 17.3 L9.5 10.8 L16 10.8 Z' fill='%23ffffff' stroke='%2338342b' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 3 1, auto;
+}
+
+/* Zonai Concentric Pattern Background Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23000000' stroke-width='2.5'%3E%3Ccircle cx='50' cy='50' r='10'/%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3Ccircle cx='50' cy='50' r='30'/%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='50'/%3E%3Ccircle cx='50' cy='50' r='60'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23000000' stroke-width='2.5'%3E%3Ccircle cx='0' cy='0' r='15'/%3E%3Ccircle cx='0' cy='0' r='30'/%3E%3Ccircle cx='0' cy='0' r='45'/%3E%3Ccircle cx='0' cy='0' r='60'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body::before {
+    opacity: 0.05;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2.5'%3E%3Ccircle cx='50' cy='50' r='10'/%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3Ccircle cx='50' cy='50' r='30'/%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='50'/%3E%3Ccircle cx='50' cy='50' r='60'/%3E%3C/g%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2.5'%3E%3Ccircle cx='0' cy='0' r='15'/%3E%3Ccircle cx='0' cy='0' r='30'/%3E%3Ccircle cx='0' cy='0' r='45'/%3E%3Ccircle cx='0' cy='0' r='60'/%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+/* Pointer cursor — for all interactive elements (links, buttons, select, clickable cards) */
+a, button, input[type="submit"], input[type="button"], select, .cursor-pointer, [role="button"], label {
+  cursor: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Ccircle cx='11' cy='11' r='8.5' fill='%23f5f3eb' stroke='%23556c45' stroke-width='2'/%3E%3Ccircle cx='11' cy='11' r='2.5' fill='%23556c45'/%3E%3C/svg%3E") 11 11, pointer !important;
+}
+
+/* Active / press cursor — solid filled dot (instant visual feedback on click) */
+a:active, button:active, .card-clickable:active, [role="button"]:active {
+  cursor: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.5' fill='%23556c45' stroke='%23ffffff' stroke-width='1.5'/%3E%3C/svg%3E") 8 8, pointer !important;
+}
+
+/* Text cursor for input fields */
+input[type="text"], input[type="search"], input[type="email"],
+input[type="password"], input[type="number"], textarea {
+  cursor: text !important;
+}
+
+/* Custom Webkit Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 1px solid var(--muted);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 9999px;
+  border: 2px solid var(--background); /* Creates a padded look */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Global Input and Dropdown Overrides */
+input, select, textarea {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  color: var(--foreground);
+  background: var(--card);
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  
+  /* Allow text selection inside inputs */
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  user-select: auto;
+}
+
+select {
+  /* Custom dropdown arrow using SVG */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2376705c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  padding-right: 3rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--muted);
+}
+
+
+/* Base structural spacing for all pages to ensure nothing touches screen edges */
+main {
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Flat Card - No shadows, purely color contrast to achieve flat design */
+.modern-card {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: none;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+/* Only apply hover lift to explicitly clickable cards (items grid) */
+.card-clickable {
+  cursor: pointer;
+  will-change: transform;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+
+.card-clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-clickable:active {
+  transform: translateY(-1px);
+  transition-duration: 0.08s;
+}
+
+/* Flat Button */
+.zonai-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+  text-decoration: none;
+}
+
+.zonai-button:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.zonai-button:active {
+  transform: scale(0.97);
+  opacity: 1;
+  transition-duration: 0.06s;
+}
+
+.zonai-button-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--muted);
+  color: var(--foreground);
+  border: none;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-decoration: none;
+}
+
+.zonai-button-outline:hover {
+  background: var(--card);
+  transform: translateY(-1px);
+}
+
+.zonai-button-outline:active {
+  transform: scale(0.97);
+  transition-duration: 0.06s;
+}
+
+/* Uniform height for all form controls so they line up */
+.zonai-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 1.25rem;
+  background: var(--card);
+  border: none;
+  color: var(--foreground);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: background 0.18s ease;
+  box-sizing: border-box;
+}
+
+/* Force OS-native select elements to use app font */
+select.zonai-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Chevron down arrow via background SVG */
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1 L6 7 L11 1' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.zonai-input:focus {
+  background: var(--muted);
+}
+
+.zonai-header {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+/* Typography styles */
+p, span {
+  line-height: 1.6;
+}
+
+/* Navigation Island Link */
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: var(--radius-full);
+  color: var(--muted-foreground);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.nav-link:hover, .nav-link:focus, .nav-link-active {
+  color: var(--primary);
+  background: var(--muted);
+}
+
+/* Floating Island Container */
+.floating-island {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: var(--card);
+  padding: 0.5rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-island);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+  max-width: 90vw;
+}
+
+/* Layout Utilities */
+.flex-row { display: flex; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+.gap-8 { gap: 2rem; }
+.justify-between { justify-content: space-between; }
+/* Mobile-First Grid — 1 col by default, scales up */
+.grid-cols-1 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.grid-cols-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.grid-cols-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.grid-cols-4 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+@media (min-width: 480px) {
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 479px) {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 639px) {
+  main { padding: 1.25rem 1rem; }
+  .floating-island { bottom: 1.5rem; }
+  .modern-card { padding: 1.25rem; }
+}
+
+/* Filter dropdown grid: collapse to 2 rows on narrow phones */
+@media (max-width: 460px) {
+  .filter-dropdowns {
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto;
+  }
+  .filter-dropdowns select:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── Full-Screen Item Detail ───────────────────────────── */
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--background);
+  z-index: 300;
+  overflow-y: auto;
+  animation: detailFadeIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes detailFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.detail-hero {
+  position: relative;
+  width: 100%;
+  height: 60vw;
+  max-height: 520px;
+  min-height: 280px;
+  overflow: hidden;
+  background: var(--muted);
+}
+
+.detail-hero-gradient {
+  position: absolute;
+  inset: 0;
+  /* Only fade the very bottom edge so the image stays fully visible */
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    rgba(var(--background-rgb, 18, 18, 18), 0.3) 28%,
+    transparent 50%
+  );
+  z-index: 1;
+}
+
+.detail-back-btn {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 400;
+  background: var(--card);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+.detail-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 1.5rem 8rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 600px) {
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.stat-card {
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-card-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted-foreground);
+}
+
+.stat-card-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.detail-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.detail-section {
+  margin-top: 1.75rem;
+}
+
+.detail-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.6rem;
+}
+
+.detail-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.zonai-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  text-transform: capitalize;
+}
+
+/* ── Linked Item Cards (inside Detail Overlay) ───────────── */
+.linked-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 0.875rem 0.625rem 0.625rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+  text-align: left;
+  border: none;
+  width: 100%;
+}
+
+.linked-card:hover {
+  background: var(--card);
+  transform: translateX(3px);
+}
+
+.linked-card-thumb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: calc(var(--radius-sm) - 2px);
+  overflow: hidden;
+  background: var(--card);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+}
+
+.linked-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.linked-card-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  line-height: 1.2;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linked-card-meta {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  margin-top: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linked-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 500px) {
+  .linked-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
