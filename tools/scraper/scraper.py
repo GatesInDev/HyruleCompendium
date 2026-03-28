@@ -146,6 +146,34 @@ def get(url: str, params: Optional[dict] = None, retries: int = 3) -> Optional[r
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Game Name Expansion Map (for appearances and metadata)
+# ──────────────────────────────────────────────────────────────────────────────
+GAME_EXPANSIONS = {
+    "TLoZ":  "The Legend of Zelda",
+    "AoL":   "Zelda II: The Adventure of Link",
+    "ALttP": "A Link to the Past",
+    "LA":    "Link's Awakening",
+    "OoT":   "Ocarina of Time",
+    "MM":    "Majora's Mask",
+    "OoA":   "Oracle of Ages",
+    "OoS":   "Oracle of Seasons",
+    "TWW":   "The Wind Waker",
+    "FSA":   "Four Swords Adventures",
+    "TMC":   "The Minish Cap",
+    "TP":    "Twilight Princess",
+    "PH":    "Phantom Hourglass",
+    "ST":    "Spirit Tracks",
+    "SS":    "Skyward Sword",
+    "ALBW":  "A Link Between Worlds",
+    "TFH":   "Tri Force Heroes",
+    "BotW":  "Breath of the Wild",
+    "TotK":  "Tears of the Kingdom",
+    "FS":    "Four Swords",
+    "HW":    "Hyrule Warriors",
+    "AoC":   "Age of Calamity",
+}
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Wikitext utilities — hardened against dirty wiki markup
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -209,7 +237,11 @@ def _clean(text: str) -> str:
     text = re.sub(r'^\|\-.*$', '', text, flags=re.MULTILINE)
     text = re.sub(r'^\|.*$', '', text, flags=re.MULTILINE)   # table cells at line start
 
-    # 11. Collapse whitespace
+    # 11. Custom header markers (e.g. == Nomenclature ==)
+    text = re.sub(r'={2,}.*?={2,}', '', text)
+    text = re.sub(r'=', '', text)
+
+    # 12. Collapse whitespace
     text = re.sub(r'[ \t]+', ' ', text)
     text = re.sub(r'\n{2,}', ' ', text)
     return text.strip()
@@ -245,12 +277,19 @@ def _is_valid_item(s: str) -> bool:
 def _extract_list(wikitext: str, *keys: str) -> list[str]:
     pat   = '|'.join(re.escape(k) for k in keys)
     regex = re.compile(rf'\|\s*(?:{pat})[^=]*=\s*([^\|\}}\n]+)', re.IGNORECASE)
+    is_appearance = any(k in ["appearances", "game", "games"] for k in keys)
+    
     results: list[str] = []
     for m in regex.finditer(wikitext):
         raw   = _clean(m.group(1))
         parts = [p.strip() for p in re.split(r'[,\n<br>•*;]+', raw)]
-        valid = [p for p in parts if _is_valid_item(p)]
-        results.extend(valid[:8])
+        for p in parts:
+            if _is_valid_item(p):
+                # Expand game abbreviations if this is the appearances field
+                if is_appearance and p in GAME_EXPANSIONS:
+                    results.append(GAME_EXPANSIONS[p])
+                else:
+                    results.append(p)
     # Deduplicate preserving order, return max 12
     seen: dict[str, bool] = {}
     unique: list[str] = []

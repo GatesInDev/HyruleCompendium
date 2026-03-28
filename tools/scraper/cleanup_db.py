@@ -34,6 +34,34 @@ log = logging.getLogger(__name__)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Game Name Expansion Map (for appearances and metadata)
+# ──────────────────────────────────────────────────────────────────────────────
+GAME_EXPANSIONS = {
+    "TLoZ":  "The Legend of Zelda",
+    "AoL":   "Zelda II: The Adventure of Link",
+    "ALttP": "A Link to the Past",
+    "LA":    "Link's Awakening",
+    "OoT":   "Ocarina of Time",
+    "MM":    "Majora's Mask",
+    "OoA":   "Oracle of Ages",
+    "OoS":   "Oracle of Seasons",
+    "TWW":   "The Wind Waker",
+    "FSA":   "Four Swords Adventures",
+    "TMC":   "The Minish Cap",
+    "TP":    "Twilight Princess",
+    "PH":    "Phantom Hourglass",
+    "ST":    "Spirit Tracks",
+    "SS":    "Skyward Sword",
+    "ALBW":  "A Link Between Worlds",
+    "TFH":   "Tri Force Heroes",
+    "BotW":  "Breath of the Wild",
+    "TotK":  "Tears of the Kingdom",
+    "FS":    "Four Swords",
+    "HW":    "Hyrule Warriors",
+    "AoC":   "Age of Calamity",
+}
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Cleaning logic (mirrors scraper.py)
 # ──────────────────────────────────────────────────────────────────────────────
 def _remove_templates(text: str, passes: int = 4) -> str:
@@ -64,6 +92,11 @@ def _clean(text: str) -> str:
     text = re.sub(r'^\{\|.*$', '', text, flags=re.MULTILINE)
     text = re.sub(r'^\|\-.*$', '', text, flags=re.MULTILINE)
     text = re.sub(r'^\|.*$', '', text, flags=re.MULTILINE)
+    
+    # Remove wikitext headers
+    text = re.sub(r'={2,}.*?={2,}', '', text)
+    text = re.sub(r'=', '', text)
+
     text = re.sub(r'[ \t]+', ' ', text)
     text = re.sub(r'\n{2,}', ' ', text)
     return text.strip()
@@ -92,17 +125,22 @@ def _is_valid(s: str) -> bool:
     return True
 
 
-def _clean_list(items: Any) -> list[str]:
+def _clean_list(items: Any, field_name: str = "") -> list[str]:
     """Clean and filter a list field."""
     if not isinstance(items, list):
         return []
     result = []
+    is_appearance = field_name in ["appearances", "game", "games"]
     for item in items:
         if not isinstance(item, str):
             continue
         cleaned = _clean(item)
         if _is_valid(cleaned):
-            result.append(cleaned)
+            # Expand abbreviations
+            if is_appearance and cleaned in GAME_EXPANSIONS:
+                result.append(GAME_EXPANSIONS[cleaned])
+            else:
+                result.append(cleaned)
     return result
 
 
@@ -160,7 +198,7 @@ def cleanup(dry_run: bool = False) -> None:
             original = doc.get(field)
             if original is None:
                 continue
-            cleaned = _clean_list(original)
+            cleaned = _clean_list(original, field)
             if cleaned != original:
                 if cleaned:
                     updates[field] = cleaned
